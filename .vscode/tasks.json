@@ -1,0 +1,227 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "clean-server",
+            "type": "shell",
+            "windows": {
+                "command": "cmd",
+                "args": [
+                    "/c",
+                    "if exist \"${workspaceFolder}\\server.exe\" del \"${workspaceFolder}\\server.exe\""
+                ]
+            },
+            "linux": {
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "if [ -f \"${workspaceFolder}/server.linux\" ]; then rm -f \"${workspaceFolder}/server.linux\"; fi"
+                ]
+            },
+            "osx": {
+                "command": "zsh",
+                "args": [
+                    "-c",
+                    "if [ -f \"${workspaceFolder}/server.osx\" ]; then rm -f \"${workspaceFolder}/server.osx\"; fi"
+                ]
+            },
+            "presentation": {
+                "reveal": "silent",
+                "panel": "new"
+            },
+            "problemMatcher": [],
+            "detail": "Clean server binary file"
+        },
+        {
+            "label": "test-server",
+            "type": "shell",
+            // 1)
+            // "windows": {
+            //     "command": "cmd",
+            //     "args": [
+            //         "/c",
+            //         "go test -v -timeout 30s -cover \"${workspaceFolder}\\server\" -coverprofile=\"${workspaceFolder}\\coverage.out\" && go tool cover -html=\"${workspaceFolder}\\coverage.out\" -o \"${workspaceFolder}\\coverage.html\""
+            //     ]
+            // },
+            // 2)
+            "windows": {
+                "command": "go",
+                "args": [
+                    "test",
+                    "-v",
+                    "-timeout",
+                    "30s",
+                    "-cover",
+                    "\"${workspaceFolder}\\server\"",
+                    "-coverprofile",
+                    "\"${workspaceFolder}\\coverage.out\""
+                ],
+            },
+            "linux": {
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "go test -v -timeout 30s -cover \"${workspaceFolder}/server\" -coverprofile=coverage.out && go tool cover -html=coverage.out -o coverage.html"
+                ]
+            },
+            "osx": {
+                "command": "zsh",
+                "args": [
+                    "-c",
+                    "go test -v -timeout 30s -cover \"${workspaceFolder}/server\""
+                ]
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new",
+                "focus": false,
+                "echo": true
+            },
+            "problemMatcher": [
+                {
+                    "owner": "go",
+                    "fileLocation": "absolute",
+                    "pattern": {
+                        "regexp": "^(.*?):(\\d+):(\\d+):\\s+(error|warning):\\s+(.*)$",
+                        "file": 1,
+                        "line": 2,
+                        "column": 3,
+                        "severity": 4,
+                        "message": 5
+                    },
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": "^=== RUN   .*$",
+                        "endsPattern": "^(PASS|FAIL|SKIP)\\s+.*$"
+                    }
+                }
+            ],
+            "detail": "Run Go unit tests (Windows/Linux/macOS) - with coverage and 30s timeout"
+        },
+        {
+            "label": "build-server",
+            "type": "shell",
+            "command": "",
+            "args": [],
+            "windows": {
+                "command": "go",
+                "args": [
+                    "build",
+                    "-v",
+                    "-o",
+                    "\"${workspaceFolder}\\server.exe\"",
+                    "./server/..."
+                ],
+            },
+            "linux": {
+                "command": "go",
+                "args": [
+                    "build",
+                    "-v",
+                    "-o",
+                    "${workspaceFolder}/server.linux",
+                    "./server/..."
+                ],
+                // "postExec": "nohup ${workspaceFolder}/server &" not work??
+            },
+            "osx": {
+                "command": "go",
+                "args": [
+                    "build",
+                    "-v",
+                    "-o",
+                    "${workspaceFolder}/server.osx",
+                    "./server/..."
+                ],
+                // "postExec": "${workspaceFolder}/server" not work??
+            },
+            "group": "build",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": "$go",
+            "detail": "Cross platform build, build server package"
+        },
+        {
+            "label": "run-server",
+            "type": "shell",
+            "windows": {
+                "command": "cmd",
+                "args": [
+                    "/c",
+                    "start \"Server\" \"${workspaceFolder}\\server.exe\""
+                ]
+            },
+            "linux": {
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "chmod +x \"${workspaceFolder}/server.linux\" && nohup \"${workspaceFolder}/server.linux\" &"
+                ]
+            },
+            "osx": {
+                "command": "zsh",
+                "args": [
+                    "-c",
+                    "chmod +x \"${workspaceFolder}/server.osx\" && nohup \"${workspaceFolder}/server.osx\" &"
+                ]
+            },
+            "presentation": {
+                "reveal": "silent",
+                "panel": "new"
+            },
+            "problemMatcher": [],
+            "detail": "Launch server in backend"
+        },
+        {
+            "label": "verify-server",
+            "type": "shell",
+            "windows": {
+                "command": "cmd",
+                "args": [
+                    "/c",
+                    "curl -v http://127.0.0.1:8088/v1/books/2"
+                ]
+            },
+            "linux": {
+                "command": "bash",
+                "args": [
+                    "-c",
+                    "curl -v http://127.0.0.1:8088/v1/books/2"
+                ]
+            },
+            "osx": {
+                "command": "zsh",
+                "args": [
+                    "-c",
+                    "curl -v http://127.0.0.1:8088/v1/books/2"
+                ]
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": [],
+            "detail": "Using curl to verify server"
+        },
+        {
+            "label": "clean-test-build-run-verify-server",
+            "type": "shell",
+            "dependsOn": [
+                "clear-server",
+                "test-server",
+                "build-server",
+                "run-server",
+                "verify-server"
+            ],
+            "dependsOrder": "sequence",
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            },
+            "problemMatcher": [],
+            "detail": "Pipeline: clean, test, build, run and verify"
+        }
+    ]
+}

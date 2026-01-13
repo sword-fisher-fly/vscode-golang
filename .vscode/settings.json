@@ -1,0 +1,22 @@
+{
+  "go.useLanguageServer": true,
+  "editor.formatOnSave": true,
+  "go.formatTool": "goimports",
+  "go.alternateTools": {
+    "go": "G:\\go\\bin\\go.exe"
+  },
+  // "go.alternateTools": {
+  //   "go": "/opt/go/bin/go"
+  // },
+  "gopls": {
+    "usePlaceholders": true,
+    "completeUnimported": true
+  },
+  "debug.console.fontSize": 14,
+  "debug.console.lineHeight": 15,
+  "debug.allowBreakpointsEverywhere": true,
+  "debug.showInStatusBar": "always",
+  "debug.showVariableTypes": true,
+  "ipynb.pasteImagesAsAttachments.enabled": false,
+  "github.copilot.chat.experimental.codeGeneration.instructions": []
+}
